@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 import json
+import csv
 
 app = Flask(__name__)
 CORS(app)
@@ -32,9 +33,19 @@ model.fit(X_train, y_train)
 with open('remedies.json', 'r') as f:
     remedies = json.load(f)
 
-@app.route('/symptoms', methods=['GET'])
 def get_symptoms():
-    symptoms = X.columns.tolist()
+    symptoms = set()
+    with open('disease_data.csv', mode='r') as csv_file:
+        csv_reader = csv.DictReader(csv_file)
+        for row in csv_reader:
+            for symptom, value in row.items():
+                if symptom != 'disease' and int(value) == 1:
+                    symptoms.add(symptom)
+    return list(symptoms)
+
+@app.route('/symptoms', methods=['GET'])
+def symptoms():
+    symptoms = get_symptoms()
     return jsonify(symptoms)
 
 @app.route('/predict', methods=['POST'])

@@ -6,6 +6,7 @@ const symptomBoxesContainer = document.getElementById('symptom-boxes');
 const resultDiv = document.getElementById('result');
 const addSymptomButton = document.getElementById('addSymptomButton');
 const predictButton = document.getElementById('predictButton');
+const remediesDiv = document.getElementById('remedies');
 
 // Fetch symptoms from the backend
 fetch('http://127.0.0.1:5000/symptoms')
@@ -69,9 +70,26 @@ function predictDisease(selectedSymptoms) {
     .then(data => {
         console.log("Prediction result:", data); // Add this line to check the prediction result
         resultDiv.textContent = `The predicted disease is: ${data.disease}`;
+        fetchRemedies(data.disease);
     })
     .catch(error => {
         console.error('Error:', error);
         resultDiv.textContent = 'An error occurred during prediction.';
     });
+}
+
+function fetchRemedies(disease) {
+    fetch('remedies.json')
+        .then(response => response.json())
+        .then(remedies => {
+            if (remedies[disease]) {
+                remediesDiv.textContent = `Remedy: ${remedies[disease]}`;
+            } else {
+                remediesDiv.textContent = 'No remedy found for the predicted disease.';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching remedies:', error);
+            remediesDiv.textContent = 'An error occurred while fetching remedies.';
+        });
 }
