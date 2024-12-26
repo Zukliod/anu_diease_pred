@@ -1,5 +1,10 @@
 {
-    "Disease1": "Remedy paragraph for Disease1.",
-    "Disease2": "Remedy paragraph for Disease2.",
-    "Disease3": "Remedy paragraph for Disease3."
+    "flu": "Remedy paragraph for flu.",
+    "dengue": "Remedy paragraph for dengue.",
+    "common_cold": "Remedy paragraph for common cold.",
+    "body_pain": "Remedy paragraph for body pain.",
+    "severe_flu": "Remedy paragraph for severe flu.",
+    "viral_fever": "Remedy paragraph for viral fever.",
+    "bronchitis": "Remedy paragraph for bronchitis.",
+    "fatigue_syndrome": "Remedy paragraph for fatigue syndrome."
 }
