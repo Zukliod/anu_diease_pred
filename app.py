@@ -4,6 +4,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
+import json
 
 app = Flask(__name__)
 CORS(app)
@@ -27,6 +28,10 @@ X_test = scaler.transform(X_test)
 model = LogisticRegression(max_iter=200)
 model.fit(X_train, y_train)
 
+# Load the remedies data
+with open('remedies.json', 'r') as f:
+    remedies = json.load(f)
+
 @app.route('/symptoms', methods=['GET'])
 def get_symptoms():
     symptoms = X.columns.tolist()
@@ -40,6 +45,12 @@ def predict():
     symptoms_scaled = scaler.transform(symptoms_df)
     prediction = model.predict(symptoms_scaled)
     return jsonify({'disease': prediction[0]})
+
+@app.route('/remedies', methods=['POST'])
+def get_remedies():
+    disease = request.json['disease']
+    remedy = remedies.get(disease, "No remedies found for this disease.")
+    return jsonify({'remedy': remedy})
 
 if __name__ == '__main__':
     app.run(debug=True)
